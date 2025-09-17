@@ -94,4 +94,4 @@ jobs:
 
       - name: Create and push manifest
         working-directory: /tmp/digests
-        run: docker buildx imagetools create -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:development $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+        run: docker buildx imagetools create -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)

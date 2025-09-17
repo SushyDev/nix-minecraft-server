@@ -1,15 +1,59 @@
 {
 	description = "Minecraft server";
 
-	inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0"; # Stable Nixpkgs
+	inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0";
 
 	outputs =
 		{ self, nixpkgs, ... }@inputs:
 		let
 			supportedSystems = nixpkgs.lib.platforms.all;
-		in
-		{
-			packages = nixpkgs.lib.genAttrs supportedSystems (system:
+
+			mkMinecraftServerPackage = (pkgs: server: mods: 
+				pkgs.stdenv.mkDerivation {
+					name = "minecraft-server";
+					version = "1.0.0";
+					src = ./.;
+
+					buildInputs = [ pkgs.jdk pkgs.bash pkgs.coreutils ];
+
+					nativeBuildInputs = [ pkgs.makeWrapper ];
+
+					installPhase = 
+						let
+							shareDirectory = "$out/share/minecraft-server";
+							serverPath = "${shareDirectory}/server.jar";
+							modsDirectory = "${shareDirectory}/mods";
+
+							binDirectory = "$out/bin";
+							binName = "minecraft-server";
+							binPath = "${binDirectory}/${binName}";
+
+
+							copyModCommand = name: file: "cp ${file} ${modsDirectory}/${name}.jar";
+							copyModCommands = pkgs.lib.mapAttrsToList copyModCommand mods;
+						in
+						''
+							mkdir -p ${binDirectory}
+							mkdir -p ${shareDirectory}
+							mkdir -p ${modsDirectory}
+
+							${pkgs.lib.concatStringsSep "\n" copyModCommands}
+
+							cp ${server} ${serverPath}
+
+							makeWrapper ${pkgs.jdk}/bin/java ${binPath} \
+								--prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.coreutils pkgs.bash ]} \
+								--add-flags "-jar ${serverPath} nogui" \
+								--run "export MINECRAFT_DATA=\''${MINECRAFT_DATA:-\$(pwd)}" \
+								--run "cd \"\$MINECRAFT_DATA\"" \
+								--run "ln -sf ${modsDirectory} \"\$MINECRAFT_DATA/mods\"";
+						'';
+
+					meta.mainProgram = "minecraft-server";
+				}
+			);
+
+			mkHorkromServer = (system:
 				let
 					pkgs = import nixpkgs { inherit system; };
 
@@ -40,49 +84,15 @@
 							sha256 = "16f0aqixcwq7ixq3pr1h2yc1m1fyxihiz9m61dcdq5784l8ifvv8";
 						};
 					};
+
+					minecraftServer = mkMinecraftServerPackage pkgs server mods;
 				in
 				{ 
-					default = pkgs.stdenv.mkDerivation {
-						name = "minecraft-server";
-						version = "1.0.0";
-						src = ./.;
-
-						nativeBuildInputs = [ pkgs.makeWrapper ];
-
-						installPhase = 
-							let
-								shareDirectory = "$out/share/minecraft-server";
-								serverPath = "${shareDirectory}/server.jar";
-								modsDirectory = "${shareDirectory}/mods";
-
-								binDirectory = "$out/bin";
-								binName = "minecraft-server";
-								binPath = "${binDirectory}/${binName}";
-
-
-								copyModCommand = name: file: "cp ${file} ${modsDirectory}/${name}.jar";
-								copyModCommands = pkgs.lib.mapAttrsToList copyModCommand mods;
-							in
-							''
-								mkdir -p ${binDirectory}
-								mkdir -p ${shareDirectory}
-								mkdir -p ${modsDirectory}
-
-								${pkgs.lib.concatStringsSep "\n" copyModCommands}
-
-								cp ${server} ${serverPath}
-
-								makeWrapper ${pkgs.jdk}/bin/java ${binPath} \
-									--prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.coreutils pkgs.bash ]} \
-									--add-flags "-jar ${serverPath} nogui" \
-									--run "export MINECRAFT_DATA=\''${MINECRAFT_DATA:-\$(pwd)}" \
-									--run "cd \"\$MINECRAFT_DATA\"" \
-									--run "ln -sf ${modsDirectory} \"\$MINECRAFT_DATA/mods\"";
-							'';
-
-						meta.mainProgram = "minecraft-server";
-					};
+					default = minecraftServer;
 				}
 			);
+		in
+		{
+			packages = nixpkgs.lib.genAttrs supportedSystems mkHorkromServer;
 		};
 }
