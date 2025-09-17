@@ -16,14 +16,8 @@ RUN cp -R $(nix-store -qR result/) /tmp/nix-store-closure
 # --- Construct final image
 FROM alpine:latest
 
-RUN apk add --no-cache bash
-
 COPY --from=build /tmp/result/ /build
 COPY --from=build /tmp/nix-store-closure/ /nix/store/
-
-RUN chmod +x /build/bin/minecraft-server && \ 
-	mkdir -p /data && \
-	ln -sf /build/share/minecraft-server/mods /data/mods
 
 WORKDIR /data
 ENV MINECRAFT_DATA=/data
