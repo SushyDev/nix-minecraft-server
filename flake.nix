@@ -14,8 +14,6 @@
 					version = "1.0.0";
 					src = ./.;
 
-					buildInputs = [ pkgs.temurin-jre-bin ];
-
 					nativeBuildInputs = [ pkgs.makeWrapper ];
 
 					installPhase = 
