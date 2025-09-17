@@ -14,7 +14,7 @@
 					version = "1.0.0";
 					src = ./.;
 
-					buildInputs = [ pkgs.jdk pkgs.bash pkgs.coreutils ];
+					buildInputs = [ pkgs.temurin-jre-bin ];
 
 					nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -41,8 +41,8 @@
 
 							cp ${server} ${serverPath}
 
-							makeWrapper ${pkgs.jdk}/bin/java ${binPath} \
-								--prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.coreutils pkgs.bash ]} \
+							makeWrapper ${pkgs.temurin-jre-bin}/bin/java ${binPath} \
+								--prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.coreutils ]} \
 								--add-flags "-jar ${serverPath} nogui" \
 								--run "export MINECRAFT_DATA=\''${MINECRAFT_DATA:-\$(pwd)}" \
 								--run "cd \"\$MINECRAFT_DATA\"" \

@@ -6,18 +6,20 @@ RUN mkdir -p /root/.config/nix && \
 
 WORKDIR /tmp
 
-COPY . .
+COPY flake.nix flake.lock ./
 
 RUN nix build
 
-RUN mkdir /tmp/nix-store-closure
+RUN mkdir /tmp/nix-store-closure && mkdir /tmp/tmp
+
 RUN cp -R $(nix-store -qR result/) /tmp/nix-store-closure
 
 # --- Construct final image
-FROM alpine:latest
+FROM scratch
 
 COPY --from=build /tmp/result/ /build
 COPY --from=build /tmp/nix-store-closure/ /nix/store/
+COPY --from=build /tmp/tmp /tmp
 
 WORKDIR /data
 ENV MINECRAFT_DATA=/data
