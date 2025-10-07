@@ -3,8 +3,7 @@
 
 	inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0";
 
-	outputs =
-		{ self, nixpkgs, ... }@inputs:
+	outputs = { self, nixpkgs, ... }@inputs:
 		let
 			supportedSystems = nixpkgs.lib.platforms.all;
 
@@ -80,6 +79,18 @@
 						fabric_api = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/P7dR8mSH/versions/CF23l2iP/fabric-api-0.133.4+1.21.8.jar";
 							sha256 = "16f0aqixcwq7ixq3pr1h2yc1m1fyxihiz9m61dcdq5784l8ifvv8";
+						};
+						lithium = pkgs.fetchurl {
+							url = "https://cdn.modrinth.com/data/gvQqBUqZ/versions/pDfTqezk/lithium-fabric-0.18.0+mc1.21.8.jar";
+							sha256 = "0zkqf58wac02a1d1klfwcbjkshavdxv4qp8p72sgvspdvzwg44wh";
+						};
+						appleskin = pkgs.fetchurl {
+							url = "https://cdn.modrinth.com/data/EsAfCjCV/versions/YAjCkZ29/appleskin-fabric-mc1.21.6-3.0.6.jar";
+							sha256 = "08cf2nsmmm1yjgzbz9syhng53kfxzdq94kfdkfxnvfjid1cbwamq";
+						};
+						simple_voice_chat = pkgs.fetchurl {
+							url = "https://cdn.modrinth.com/data/9eGKb6K1/versions/iGd9Wjlq/voicechat-fabric-1.21.8-2.5.35.jar";
+							sha256 = "sha256-j4Ie88YtqfnEipffXrIyF2306UrPyZFKOzH3boGCPR8=";
 						};
 					};
 
