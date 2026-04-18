@@ -4,7 +4,7 @@
 
 	outputs = { self, nixpkgs, ... }@inputs:
 		let
-			supportedSystems = nixpkgs.lib.platforms.all;
+			supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
 
 			mkMinecraftServerPackage = (pkgs: server: mods: 
 				pkgs.stdenv.mkDerivation {
@@ -94,9 +94,25 @@
 					};
 
 					minecraftServer = mkMinecraftServerPackage pkgs server mods;
+
+					dockerImage = pkgs.dockerTools.buildLayeredImage {
+						name = "nix-minecraft-server";
+						tag = "latest";
+						contents = [ minecraftServer pkgs.bash pkgs.coreutils pkgs.temurin-jre-bin-21 ];
+						config = {
+							Env = [
+								"MINECRAFT_DATA=/data"
+								"PATH=${pkgs.lib.makeBinPath [ pkgs.coreutils pkgs.bash ]}"
+							];
+							WorkingDir = "/data";
+							Volumes = { "/data" = {}; };
+							Entrypoint = [ "${minecraftServer}/bin/minecraft-server" ];
+						};
+					};
 				in
 				{ 
 					default = minecraftServer;
+					docker = dockerImage;
 				}
 			);
 		in
