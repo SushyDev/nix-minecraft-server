@@ -37,6 +37,7 @@ jobs:
         with:
           extra-conf: |
             system-features = nixos-test benchmark big-parallel kvm
+            flakehub-cache-server = ""
 
       - name: Set up Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v7
