@@ -37,7 +37,7 @@
 
 							cp ${server} ${serverPath}
 
-							makeWrapper ${pkgs.temurin-jre-bin-21}/bin/java ${binPath} \
+							makeWrapper ${pkgs.temurin-jre-bin-25}/bin/java ${binPath} \
 								--prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.coreutils ]} \
 								--add-flags "-jar ${serverPath} nogui" \
 								--run "export MINECRAFT_DATA=\''${MINECRAFT_DATA:-\$(pwd)}" \
@@ -98,7 +98,7 @@
 					dockerImage = pkgs.dockerTools.buildLayeredImage {
 						name = "nix-minecraft-server";
 						tag = "latest";
-						contents = [ minecraftServer pkgs.bash pkgs.coreutils pkgs.temurin-jre-bin-21 ];
+						contents = [ minecraftServer pkgs.bash pkgs.coreutils pkgs.temurin-jre-bin-25 ];
 						config = {
 							Env = [
 								"MINECRAFT_DATA=/data"

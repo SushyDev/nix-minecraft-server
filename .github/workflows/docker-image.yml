@@ -59,6 +59,9 @@ jobs:
           # Log in to registry
           echo ${{ secrets.GITHUB_TOKEN }} | docker login -u ${{ github.repository_owner }} --password-stdin $REGISTRY
           
+          # Tag the image with registry/name and platform
+          docker tag nix-minecraft-server:latest $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }}
+          
           # Push the image
           docker push $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }}
           
