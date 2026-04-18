@@ -40,6 +40,8 @@ jobs:
 
       - name: Set up Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v7
+        with:
+          use-flakehub: false
 
       - name: Build Docker image with Nix
         run: |
