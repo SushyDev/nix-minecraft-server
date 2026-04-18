@@ -66,10 +66,12 @@ jobs:
           
           # Push the image
           docker push $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }}
-          
-          # Get digest for manifest
-          DIGEST=$(docker inspect --format='{{.RepoDigests}}' $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }} | grep -oP 'sha256:\K[a-f0-9]+' | head -1)
-          touch "/tmp/digests/$DIGEST"
+
+      - name: Save image digest
+        run: |
+          mkdir -p /tmp/digests
+          # Save the platform pair as filename for the merge job to use
+          echo "${{ env.PLATFORM_PAIR }}" > "/tmp/digests/${{ env.PLATFORM_PAIR }}"
 
       - name: Upload digest
         uses: actions/upload-artifact@v4
