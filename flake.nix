@@ -54,8 +54,8 @@
 					pkgs = import nixpkgs { inherit system; };
 
 					server = pkgs.fetchurl {
-						url = "https://meta.fabricmc.net/v2/versions/loader/1.21.10/0.17.3/1.1.0/server/jar";
-						sha256 = "0ddsiwyzkmifiprr1gaapvcrjrfvysxq72s7384sbzkacyn2sg9p";
+						url = "https://meta.fabricmc.net/v2/versions/loader/26.1.2/0.19.2/1.1.1/server/jar";
+						sha256 = "1gax8i1risr0irgcmbwc0jdf78yhahplsqiyhiblrq7hkydx26z9";
 					};
 					
 					mods = {
