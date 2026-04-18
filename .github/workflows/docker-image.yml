@@ -40,9 +40,12 @@ jobs:
             flakehub-cache-server = ""
 
       - name: Set up Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v7
+        uses: actions/cache@v4
         with:
-          use-flakehub: false
+          path: /nix/store
+          key: nix-store-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            nix-store-${{ runner.os }}-
 
       - name: Build Docker image with Nix
         run: |
