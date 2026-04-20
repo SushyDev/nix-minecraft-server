@@ -81,7 +81,7 @@
 						};
 						lithium = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/gvQqBUqZ/versions/R7MxYvuW/lithium-fabric-0.24.2%2Bmc26.1.2.jar";
-							sha256 = "0jq0219f664qplb2lz25ai2rjfln0mi8s8f400n9hy7na0vz5bp7";
+							sha256 = "sha256-IlKJ8aLw4nSbNl9lpJwD6o9FJEXkmJmVEME8s5ndTgA=";
 						};
 						appleskin = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/EsAfCjCV/versions/HwaLJe3v/appleskin-fabric-mc26.1-3.0.9.jar";
@@ -89,7 +89,7 @@
 						};
 						simple_voice_chat = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/9eGKb6K1/versions/eGxtLv6D/voicechat-fabric-2.6.16%2B26.1.2.jar";
-							sha256 = "0xmkqcnh9v0sd4clx0q1m970d0vvy0vwa0mfa9kq12zc28q6jbn8";
+							sha256 = "sha256-IlKJ8aLw4nSbNl9lpJwD6o9FJEXkmJmVEME8s5ndTgA=";
 						};
 					};
 
