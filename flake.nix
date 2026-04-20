@@ -77,7 +77,7 @@
 						};
 						fabric_api = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/P7dR8mSH/versions/tnmuHGZA/fabric-api-0.146.1%2B26.1.2.jar";
-							sha256 = "15sps2rjpqqbpd5m85cigsc72wmgckm8lvzi2za10phjsd080ch0";
+							sha256 = "sha256-8Jy/xmxRtw4z4GJ+38wwbXHVn4NGYp4w/mFvW9cmvKg=";
 						};
 						lithium = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/gvQqBUqZ/versions/R7MxYvuW/lithium-fabric-0.24.2%2Bmc26.1.2.jar";
