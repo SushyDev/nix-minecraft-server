@@ -61,7 +61,7 @@
 					mods = {
 						distant_horizons = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/uCdwusMi/versions/oIitqzZi/DistantHorizons-3.0.1-b-26.1.2-fabric-neoforge.jar";
-							sha256 = "0y35pb16c9p50qbdisnybmg83kwllds03s63yyjlid5lq38c5nwc";
+							sha256 = "sha256-kJCkLQ32wwl66CuzNzU7R4RNT7ufRK+3V6JIP12/zMU=";
 						};
 						# xaeros_world_map = pkgs.fetchurl {
 						# 	url = "https://cdn.modrinth.com/data/NcUtCpym/versions/81Qc21E2/XaerosWorldMap_1.39.17_Fabric_1.21.9.jar";
