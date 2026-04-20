@@ -73,7 +73,7 @@
 						# };
 						bluemap = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/swbUV1cr/versions/wsiZLBKu/bluemap-5.20-forge.jar";
-							sha256 = "1kn7zbk9siw676aik0zlbwkxvp8shvlzyqn5sl1gx6xcfy5cw30h";
+							sha256 = "sha256-1D9XV6Y93ffwDTJ2lXZxkI7U8L+bVRuNo1Wi/JYRUyQ=";
 						};
 						fabric_api = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/P7dR8mSH/versions/tnmuHGZA/fabric-api-0.146.1%2B26.1.2.jar";
