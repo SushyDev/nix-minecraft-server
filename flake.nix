@@ -89,7 +89,7 @@
 						};
 						simple_voice_chat = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/9eGKb6K1/versions/eGxtLv6D/voicechat-fabric-2.6.16%2B26.1.2.jar";
-							sha256 = "sha256-IlKJ8aLw4nSbNl9lpJwD6o9FJEXkmJmVEME8s5ndTgA=";
+							sha256 = "sha256-oo6R7AWV6QKx4iVgdMvBN6GLob6Azi9gat3VDletQ2I=";
 						};
 					};
 
