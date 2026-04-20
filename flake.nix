@@ -85,7 +85,7 @@
 						};
 						appleskin = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/EsAfCjCV/versions/HwaLJe3v/appleskin-fabric-mc26.1-3.0.9.jar";
-							sha256 = "128bh1p1m2bavwiimb4b6gypm6yx4hxsd4l4kdhbghpl78aincbs";
+							sha256 = "sha256-iNCycR/oxqFpbPGfIcfgfWOm7PzPiIu5AmBWb8asTb4=";
 						};
 						simple_voice_chat = pkgs.fetchurl {
 							url = "https://cdn.modrinth.com/data/9eGKb6K1/versions/eGxtLv6D/voicechat-fabric-2.6.16%2B26.1.2.jar";
