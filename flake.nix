@@ -54,14 +54,14 @@
 					pkgs = import nixpkgs { inherit system; };
 
 					server = pkgs.fetchurl {
-						url = "https://meta.fabricmc.net/v2/versions/loader/26.1.2/0.19.2/1.1.1/server/jar";
-						sha256 = "1gax8i1risr0irgcmbwc0jdf78yhahplsqiyhiblrq7hkydx26z9";
+						url = "https://meta.fabricmc.net/v2/versions/loader/26.2/0.19.3/1.1.2/server/jar";
+						sha256 = "sha256-MB+DqsNrI/K8ZMxYVg7fmFM8+qMOU68AK6lQx19BALQ=";
 					};
 					
 					mods = {
 						distant_horizons = pkgs.fetchurl {
-							url = "https://cdn.modrinth.com/data/uCdwusMi/versions/oIitqzZi/DistantHorizons-3.0.1-b-26.1.2-fabric-neoforge.jar";
-							sha256 = "sha256-kJCkLQ32wwl66CuzNzU7R4RNT7ufRK+3V6JIP12/zMU=";
+							url = "https://cdn.modrinth.com/data/uCdwusMi/versions/gBf0SaV1/DistantHorizons-3.2.0-b-26.2-fabric-neoforge.jar";
+							sha256 = "sha256-+3pg+gZ3XSCP9HzkuYxmjNxSdEnDfaSoBoaVeURWNJ8=";
 						};
 						# xaeros_world_map = pkgs.fetchurl {
 						# 	url = "https://cdn.modrinth.com/data/NcUtCpym/versions/81Qc21E2/XaerosWorldMap_1.39.17_Fabric_1.21.9.jar";
@@ -72,24 +72,24 @@
 						# 	sha256 = "1xqac2k5qvizs4rnnkqssk4dlgmzramxc5afgc0hbclbbmyhnl63";
 						# };
 						bluemap = pkgs.fetchurl {
-							url = "https://cdn.modrinth.com/data/swbUV1cr/versions/wsiZLBKu/bluemap-5.20-forge.jar";
-							sha256 = "sha256-1D9XV6Y93ffwDTJ2lXZxkI7U8L+bVRuNo1Wi/JYRUyQ=";
+							url = "https://cdn.modrinth.com/data/swbUV1cr/versions/VTvifNPN/bluemap-5.22-fabric.jar";
+							sha256 = "sha256-TDdMY8q/eEsXt2noFMTAiPFfMnvLo2QR5A2ttRhiJ6c=";
 						};
 						fabric_api = pkgs.fetchurl {
-							url = "https://cdn.modrinth.com/data/P7dR8mSH/versions/tnmuHGZA/fabric-api-0.146.1%2B26.1.2.jar";
-							sha256 = "sha256-8Jy/xmxRtw4z4GJ+38wwbXHVn4NGYp4w/mFvW9cmvKg=";
+							url = "https://cdn.modrinth.com/data/P7dR8mSH/versions/3gT0I5vt/fabric-api-0.156.0%2B26.2.jar";
+							sha256 = "sha256-jeGNn2qKKlshIO+ei/+3nMm3WYnAwCLDnJ38G8Oimpk=";
 						};
 						lithium = pkgs.fetchurl {
-							url = "https://cdn.modrinth.com/data/gvQqBUqZ/versions/R7MxYvuW/lithium-fabric-0.24.2%2Bmc26.1.2.jar";
-							sha256 = "sha256-IlKJ8aLw4nSbNl9lpJwD6o9FJEXkmJmVEME8s5ndTgA=";
+							url = "https://cdn.modrinth.com/data/gvQqBUqZ/versions/f7vZ0VWU/lithium-fabric-0.25.3%2Bmc26.2.jar";
+							sha256 = "sha256-/d6S4jjoB1+JrX9wHyo9WFSviLqaZ2VxhKRAexBKxWM=";
 						};
 						appleskin = pkgs.fetchurl {
-							url = "https://cdn.modrinth.com/data/EsAfCjCV/versions/HwaLJe3v/appleskin-fabric-mc26.1-3.0.9.jar";
-							sha256 = "sha256-iNCycR/oxqFpbPGfIcfgfWOm7PzPiIu5AmBWb8asTb4=";
+							url = "https://cdn.modrinth.com/data/EsAfCjCV/versions/uo5bAN1Y/appleskin-fabric-mc26.2-3.0.10.jar";
+							sha256 = "sha256-6S9NKJc67Hup27+nTRY6H62rAoj7NIIkfrRDzwOqIXg=";
 						};
 						simple_voice_chat = pkgs.fetchurl {
-							url = "https://cdn.modrinth.com/data/9eGKb6K1/versions/eGxtLv6D/voicechat-fabric-2.6.16%2B26.1.2.jar";
-							sha256 = "sha256-oo6R7AWV6QKx4iVgdMvBN6GLob6Azi9gat3VDletQ2I=";
+							url = "https://cdn.modrinth.com/data/9eGKb6K1/versions/3SOh5iiX/voicechat-fabric-2.6.21%2B26.2.jar";
+							sha256 = "sha256-7V+hoRf6Jr+8hGPCf4io3/xT2id3gfJm7RESKB9/Zfc=";
 						};
 					};
 
