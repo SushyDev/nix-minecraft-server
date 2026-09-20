@@ -1,16 +1,48 @@
 name: docker-image
 
+# Runs when a draft release (created by the update-mods workflows) is promoted
+# to a full release, i.e. "Publish release" in the GitHub UI.
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
+  sync-main:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.resolve.outputs.sha }}
+      mc_version: ${{ steps.mcversion.outputs.mc }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.target_commitish || github.ref }}
+          fetch-depth: 0
+
+      - id: resolve
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - id: mcversion
+        run: echo "mc=$(jq -r .minecraft_version mods.json)" >> "$GITHUB_OUTPUT"
+
+      # Fast-forward main to whatever commit this release was cut from, so main
+      # always reflects the last thing actually shipped.
+      - name: Fast-forward main
+        if: github.event_name == 'release'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout main
+          git merge --ff-only ${{ steps.resolve.outputs.sha }}
+          git push origin main
+
   build:
+    needs: sync-main
     strategy:
       fail-fast: true
       matrix:
@@ -31,6 +63,8 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.sync-main.outputs.sha }}
 
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v12
@@ -50,7 +84,6 @@ jobs:
       - name: Build Docker image with Nix
         run: |
           nix build .#packages.${{ matrix.platform == 'linux/amd64' && 'x86_64-linux' || 'aarch64-linux' }}.docker
-          mkdir -p /tmp/digests
           IMAGE_PATH=$(readlink -f result)
           echo "IMAGE_PATH=$IMAGE_PATH" >> $GITHUB_ENV
 
@@ -58,17 +91,18 @@ jobs:
         env:
           REGISTRY: ${{ env.REGISTRY }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          MC_VERSION: ${{ needs.sync-main.outputs.mc_version }}
         run: |
           # Load the image into Docker
           docker load < $IMAGE_PATH
-          
+
           # Log in to registry
           echo ${{ secrets.GITHUB_TOKEN }} | docker login -u ${{ github.repository_owner }} --password-stdin $REGISTRY
-          
-          # Tag the image with registry/name and platform
-          docker tag nix-minecraft-server:latest $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }}
-          
-          # Push the image
+
+          # The image built by Nix is tagged with the Minecraft version (see mods.json).
+          # Push a per-platform intermediate tag; the merge job below turns these
+          # into the final multi-arch "latest" / "<mc-version>" / "<release-tag>" tags.
+          docker tag nix-minecraft-server:$MC_VERSION $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }}
           docker push $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }}
 
       - name: Save image digest
@@ -86,7 +120,7 @@ jobs:
           retention-days: 1
 
   merge:
-    needs: build
+    needs: [sync-main, build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -113,6 +147,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create and push manifest
+      - name: Create and push manifests
         working-directory: /tmp/digests
-        run: docker buildx imagetools create -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-%s ' *)
+        env:
+          MC_VERSION: ${{ needs.sync-main.outputs.mc_version }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          SOURCES=$(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-%s ' *)
+          for tag in latest "$MC_VERSION" ${RELEASE_TAG:+"$RELEASE_TAG"}; do
+            docker buildx imagetools create -t "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$tag" $SOURCES
+          done

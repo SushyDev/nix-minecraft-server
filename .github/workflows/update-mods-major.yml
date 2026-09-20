@@ -1,0 +1,72 @@
+name: Update mods (major version)
+
+on:
+  workflow_dispatch:
+    inputs:
+      minecraft_version:
+        description: "Target Minecraft version (e.g. 26.4)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v12
+        with:
+          extra-conf: |
+            flakehub-cache-server = ""
+
+      - name: Set up Nix cache
+        uses: actions/cache@v4
+        with:
+          path: /nix/store
+          key: nix-store-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            nix-store-${{ runner.os }}-
+
+      - name: Run updater
+        id: update
+        run: |
+          set +e
+          nix run .#update -- "${{ inputs.minecraft_version }}"
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          set -e
+          # A hard failure (no Fabric loader at all for this version) should stop the workflow.
+          if [ "$(cat update-summary.md 2>/dev/null | wc -l)" -eq 0 ]; then
+            echo "::error::Updater produced no summary — likely no Fabric loader for ${{ inputs.minecraft_version }}."
+            exit 1
+          fi
+
+      - name: Commit and push update branch
+        env:
+          BRANCH: mods-update/${{ inputs.minecraft_version }}-${{ github.run_number }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add mods.json
+          git commit -m "Update mods for Minecraft ${{ inputs.minecraft_version }}"
+          git push origin "$BRANCH"
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "mc${{ inputs.minecraft_version }}-${{ github.run_number }}" \
+            --target "$BRANCH" \
+            --title "Minecraft ${{ inputs.minecraft_version }} update (#${{ github.run_number }})" \
+            --notes-file update-summary.md \
+            --draft
+
+      - name: Warn about skipped mods
+        if: steps.update.outputs.exit_code == '2'
+        run: |
+          echo "::warning::Some mods have no Fabric build for Minecraft ${{ inputs.minecraft_version }} — see the draft release notes before promoting."

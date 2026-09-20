@@ -1,0 +1,80 @@
+name: Update mods (incremental)
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # weekly, Monday 06:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v12
+        with:
+          extra-conf: |
+            flakehub-cache-server = ""
+
+      - name: Set up Nix cache
+        uses: actions/cache@v4
+        with:
+          path: /nix/store
+          key: nix-store-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            nix-store-${{ runner.os }}-
+
+      - name: Run updater
+        id: update
+        run: |
+          set +e
+          nix run .#update
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          set -e
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet -- mods.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Read minecraft version
+        if: steps.diff.outputs.changed == 'true'
+        id: mcversion
+        run: echo "mc=$(jq -r .minecraft_version mods.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push update branch
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          BRANCH: mods-update/${{ github.run_number }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add mods.json
+          git commit -m "Update mods for Minecraft ${{ steps.mcversion.outputs.mc }}"
+          git push origin "$BRANCH"
+          echo "BRANCH=$BRANCH" >> "$GITHUB_ENV"
+
+      - name: Create draft release
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "mc${{ steps.mcversion.outputs.mc }}-${{ github.run_number }}" \
+            --target "$BRANCH" \
+            --title "Minecraft ${{ steps.mcversion.outputs.mc }} mod update (#${{ github.run_number }})" \
+            --notes-file update-summary.md \
+            --draft
+
+      - name: Fail if some mods could not be updated
+        if: steps.update.outputs.exit_code == '2'
+        run: |
+          echo "::warning::Some mods have no Fabric build for this Minecraft version — see the draft release notes."
