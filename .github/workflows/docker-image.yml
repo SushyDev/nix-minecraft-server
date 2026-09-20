@@ -87,22 +87,64 @@ jobs:
           IMAGE_PATH=$(readlink -f result)
           echo "IMAGE_PATH=$IMAGE_PATH" >> $GITHUB_ENV
 
-      - name: Load and push image
+      - name: Load image
+        env:
+          MC_VERSION: ${{ needs.sync-main.outputs.mc_version }}
+        run: |
+          docker load < $IMAGE_PATH
+          echo "LOCAL_IMAGE=nix-minecraft-server:$MC_VERSION" >> $GITHUB_ENV
+
+      - name: Health check - boot the server
+        timeout-minutes: 8
+        run: |
+          mkdir -p /tmp/mc-test-data
+          echo "eula=true" > /tmp/mc-test-data/eula.txt
+
+          CONTAINER_ID=$(docker run -d \
+            -v /tmp/mc-test-data:/data \
+            -p 25565:25565 \
+            "$LOCAL_IMAGE")
+          echo "CONTAINER_ID=$CONTAINER_ID" >> "$GITHUB_ENV"
+
+          echo "Waiting for the server to report ready..."
+          healthy=false
+          for _ in $(seq 1 90); do
+            if ! docker ps -q --no-trunc | grep -q "$CONTAINER_ID"; then
+              echo "Container exited before becoming healthy."
+              break
+            fi
+            if docker logs "$CONTAINER_ID" 2>&1 | grep -q 'Done ('; then
+              healthy=true
+              break
+            fi
+            sleep 5
+          done
+
+          echo "--- server log ---"
+          docker logs "$CONTAINER_ID" 2>&1 | tail -50
+
+          if [ "$healthy" != "true" ]; then
+            echo "::error::Server did not become healthy within the timeout."
+            exit 1
+          fi
+          echo "Server reported healthy."
+
+      - name: Stop test container
+        if: always()
+        run: |
+          [ -n "$CONTAINER_ID" ] && docker stop "$CONTAINER_ID" 2>/dev/null || true
+          [ -n "$CONTAINER_ID" ] && docker rm "$CONTAINER_ID" 2>/dev/null || true
+
+      - name: Push image
         env:
           REGISTRY: ${{ env.REGISTRY }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          MC_VERSION: ${{ needs.sync-main.outputs.mc_version }}
         run: |
-          # Load the image into Docker
-          docker load < $IMAGE_PATH
-
-          # Log in to registry
           echo ${{ secrets.GITHUB_TOKEN }} | docker login -u ${{ github.repository_owner }} --password-stdin $REGISTRY
 
-          # The image built by Nix is tagged with the Minecraft version (see mods.json).
           # Push a per-platform intermediate tag; the merge job below turns these
           # into the final multi-arch "latest" / "<mc-version>" / "<release-tag>" tags.
-          docker tag nix-minecraft-server:$MC_VERSION $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }}
+          docker tag "$LOCAL_IMAGE" $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }}
           docker push $REGISTRY/$IMAGE_NAME:latest-${{ env.PLATFORM_PAIR }}
 
       - name: Save image digest
