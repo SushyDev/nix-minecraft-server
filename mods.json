@@ -10,9 +10,9 @@
 		{
 			"name": "distant_horizons",
 			"project": "uCdwusMi",
-			"version": "3.3.0-26.3",
-			"url": "https://cdn.modrinth.com/data/uCdwusMi/versions/I4fvXVOw/DistantHorizons-3.3.0-26.3-fabric-neoforge.jar",
-			"sha256": "sha256-+lglJYfw7bJ/92Ehfj36kR+WSPk+qvazseDoYjlmN64="
+			"version": "3.3.2-26.3",
+			"url": "https://cdn.modrinth.com/data/uCdwusMi/versions/gfi11b05/DistantHorizons-3.3.2-26.3-fabric-neoforge.jar",
+			"sha256": "sha256-JK2PT0D9QaZiM5zNHAFAWndiDy90SAgZlGegzHaSefQ="
 		},
 		{
 			"name": "xaeros_world_map",
@@ -31,9 +31,9 @@
 		{
 			"name": "bluemap",
 			"project": "swbUV1cr",
-			"version": "5.27-fabric",
-			"url": "https://cdn.modrinth.com/data/swbUV1cr/versions/MX0sTM4l/bluemap-5.27-fabric.jar",
-			"sha256": "sha256-ED/H+xNKKr+Yesou9deXr+3zk2YpPLxSp7544TgijF0="
+			"version": "5.28-fabric",
+			"url": "https://cdn.modrinth.com/data/swbUV1cr/versions/bbzcTCOs/bluemap-5.28-fabric.jar",
+			"sha256": "sha256-77B84xISqdLVRkqf6rdes0lso4zEn4kwYtOdCzyH+/o="
 		},
 		{
 			"name": "fabric_api",
@@ -45,9 +45,9 @@
 		{
 			"name": "lithium",
 			"project": "gvQqBUqZ",
-			"version": "mc26.3-0.26.1-fabric",
-			"url": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/WXHRsMRl/lithium-fabric-0.26.1%2Bmc26.3.jar",
-			"sha256": "sha256-NOXhl8QNo3L2dQDtSWuyGT2RR8EtUPmI4EpRMgXRgBU="
+			"version": "mc26.3-0.26.2-fabric",
+			"url": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/xS0Q8LSi/lithium-fabric-0.26.2%2Bmc26.3.jar",
+			"sha256": "sha256-C+Wxfvn26SRM0HsksidVOnOuwM+TFYzygJnzCUwWfxs="
 		},
 		{
 			"name": "appleskin",
