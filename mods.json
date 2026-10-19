@@ -10,44 +10,44 @@
 		{
 			"name": "distant_horizons",
 			"project": "uCdwusMi",
-			"version": "3.3.0-26.3",
-			"url": "https://cdn.modrinth.com/data/uCdwusMi/versions/I4fvXVOw/DistantHorizons-3.3.0-26.3-fabric-neoforge.jar",
-			"sha256": "sha256-+lglJYfw7bJ/92Ehfj36kR+WSPk+qvazseDoYjlmN64="
+			"version": "3.3.4-26.3",
+			"url": "https://cdn.modrinth.com/data/uCdwusMi/versions/TGgEbP9A/DistantHorizons-3.3.4-26.3-fabric-neoforge.jar",
+			"sha256": "sha256-uj5chadloQkhmDHfmbme9c/N7gWy36Z5YRaZO9SNOUc="
 		},
 		{
 			"name": "xaeros_world_map",
 			"project": "NcUtCpym",
-			"version": "fabric-26.3-1.46.4",
-			"url": "https://cdn.modrinth.com/data/NcUtCpym/versions/UleMm8za/xaeroworldmap-fabric-26.3-1.46.4.jar",
-			"sha256": "sha256-Ith0jPLuHZIIPxcTuYV9jr8XjHkZnNJI5E171gdoh8g="
+			"version": "fabric-26.3-1.47.0",
+			"url": "https://cdn.modrinth.com/data/NcUtCpym/versions/nz9xjzWi/xaeroworldmap-fabric-26.3-1.47.0.jar",
+			"sha256": "sha256-LNPO3eEhIZWLs/xQC4zKP+z2uVFyh/dPAKuWFTGlRtg="
 		},
 		{
 			"name": "xaeros_minimap",
 			"project": "1bokaNcj",
-			"version": "fabric-26.3-26.5.3",
-			"url": "https://cdn.modrinth.com/data/1bokaNcj/versions/YPkAliDt/xaerominimap-fabric-26.3-26.5.3.jar",
-			"sha256": "sha256-guZ+8jpoyFYHU2adm+4q9OKckcfXXJmv1QKkugu+UaA="
+			"version": "fabric-26.3-26.6.0",
+			"url": "https://cdn.modrinth.com/data/1bokaNcj/versions/B2aG1aya/xaerominimap-fabric-26.3-26.6.0.jar",
+			"sha256": "sha256-DMyvopGB5wS/yIjHBjoZspyC65iD7Bp9jwLF7Y+TGj0="
 		},
 		{
 			"name": "bluemap",
 			"project": "swbUV1cr",
-			"version": "5.27-fabric",
-			"url": "https://cdn.modrinth.com/data/swbUV1cr/versions/MX0sTM4l/bluemap-5.27-fabric.jar",
-			"sha256": "sha256-ED/H+xNKKr+Yesou9deXr+3zk2YpPLxSp7544TgijF0="
+			"version": "5.29-fabric",
+			"url": "https://cdn.modrinth.com/data/swbUV1cr/versions/SX74rxzP/bluemap-5.29-fabric.jar",
+			"sha256": "sha256-R6reIg114wc0IXbKSryDSTpVJ28ghINefKaIDGQMBDA="
 		},
 		{
 			"name": "fabric_api",
 			"project": "P7dR8mSH",
-			"version": "0.161.0+26.3",
-			"url": "https://cdn.modrinth.com/data/P7dR8mSH/versions/bNnaTiuM/fabric-api-0.161.0%2B26.3.jar",
-			"sha256": "sha256-hvFheKPOzIh6haTP6aedkvpzQdjzm1lRpNatgAq2V6Y="
+			"version": "0.163.0+26.3",
+			"url": "https://cdn.modrinth.com/data/P7dR8mSH/versions/bq3SsNGk/fabric-api-0.163.0%2B26.3.jar",
+			"sha256": "sha256-SWn1GX6+2vaBzJE+QljIvRfMuYAp21KinptI6Zgmei0="
 		},
 		{
 			"name": "lithium",
 			"project": "gvQqBUqZ",
-			"version": "mc26.3-0.26.1-fabric",
-			"url": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/WXHRsMRl/lithium-fabric-0.26.1%2Bmc26.3.jar",
-			"sha256": "sha256-NOXhl8QNo3L2dQDtSWuyGT2RR8EtUPmI4EpRMgXRgBU="
+			"version": "mc26.3-0.26.2-fabric",
+			"url": "https://cdn.modrinth.com/data/gvQqBUqZ/versions/xS0Q8LSi/lithium-fabric-0.26.2%2Bmc26.3.jar",
+			"sha256": "sha256-C+Wxfvn26SRM0HsksidVOnOuwM+TFYzygJnzCUwWfxs="
 		},
 		{
 			"name": "appleskin",
